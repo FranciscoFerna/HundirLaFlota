@@ -1,0 +1,7 @@
+[
+    { "nombre": "Portaaviones", "tamaño": 5 },
+    { "nombre": "Acorazado", "tamaño": 4 },
+    { "nombre": "Crucero", "tamaño": 3 },
+    { "nombre": "Submarino", "tamaño": 3 },
+    { "nombre": "Destructor", "tamaño": 2 }
+]
