@@ -62,3 +62,15 @@ h3 {
 .casilla.barco {
     background-color: #666;
 }
+
+.casilla.agua {
+    background-color: lightblue;
+}
+
+.casilla.tocado {
+    background-color: orange;
+}
+
+.casilla.hundido {
+    background-color: red;
+}

@@ -14,8 +14,8 @@ export class Casilla {
         this.atacada = true;
         if (this.barco) {
             this.barco.registrarImpacto();
-            return this.barco.estaHundido() ? "Hundido" : "Tocado";
+            return this.barco.estaHundido() ? "hundido" : "tocado";
         }
-        return "Agua";
+        return "agua";
     }
 }
