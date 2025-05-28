@@ -1,0 +1,64 @@
+body {
+    font-family: sans-serif;
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+h1,
+h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#barcos-disponibles {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#barcos-disponibles button {
+    margin: 4px;
+    padding: 6px 10px;
+    font-size: 14px;
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#barcos-disponibles button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+}
+
+#reset {
+    display: block;
+    margin: 10px auto 20px auto;
+    padding: 6px 12px;
+    font-size: 14px;
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.tablero {
+    display: grid;
+    grid-template-columns: repeat(10, 30px);
+    grid-template-rows: repeat(10, 30px);
+    gap: 2px;
+    justify-content: center;
+}
+
+.casilla {
+    width: 30px;
+    height: 30px;
+    background-color: #ddd;
+    border: 1px solid #aaa;
+    cursor: pointer;
+}
+
+.casilla.barco {
+    background-color: #666;
+}
