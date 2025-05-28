@@ -81,3 +81,7 @@ input[type=number] {
     width: 40px;
     margin: 0 4px;
 }
+
+.casilla.preview {
+    background-color: rgba(100, 100, 100, 0.4);
+}
