@@ -80,7 +80,7 @@ function asignarEventosCasillas() {
                     activarAtaquesIA();
                 }
             } else {
-                alert("No se puede colocar el barco ahí");
+                alert("No se puede colocar el barco ahi");
             }
         });
     });
@@ -90,7 +90,7 @@ function bloquearTablero() {
     document.querySelectorAll("#tablero-jugador .casilla").forEach(c => {
         c.style.pointerEvents = "none";
     });
-    alert("Todos los barcos colocados. ¡Empieza el combate!");
+    alert("Todos los barcos colocados. Empieza el combate");
 }
 
 function bloquearAtaquesIA() {
@@ -150,17 +150,17 @@ function asignarEventosAtaqueIA() {
 
             if (resultado === "agua") {
                 celda.classList.add("agua");
-                alert("💧 Agua");
+                alert("Agua");
             } else if (resultado === "tocado") {
                 celda.classList.add("tocado");
-                alert("🔥 Tocado");
+                alert("Tocado");
             } else if (resultado === "hundido") {
                 celda.classList.add("hundido");
-                alert("💥 Hundido");
+                alert("Hundido");
             }
 
             if (tableroIA.barcos.every(barco => barco.estaHundido())) {
-                alert("🎉 ¡Has ganado!");
+                alert("Has ganado");
                 bloquearTablero();
                 bloquearAtaquesIA();
                 return;
@@ -186,17 +186,17 @@ function turnoIA() {
 
     if (resultado === "agua") {
         celdaDOM.classList.add("agua");
-        alert("La IA ha fallado, ha salido agua");
+        alert("La IA ha fallado ( Agua)");
     } else if (resultado === "tocado") {
         celdaDOM.classList.add("tocado");
-        alert("La IA ha tocado uno de tus barcos");
+        alert("La IA ha tocado uno de tus barcos (Tocado)");
     } else if (resultado === "hundido") {
         celdaDOM.classList.add("hundido");
-        alert("La IA ha hundido uno de tus barcos");
+        alert("La IA ha hundido uno de tus barcos (Hundido)");
     }
 
     if (tablero.barcos.every(barco => barco.estaHundido())) {
-        alert("Partida terminada. Has perdido");
+        alert("Has perdido. La IA ha hundido todos tus barcos.");
         bloquearTablero();
         bloquearAtaquesIA();
     }
