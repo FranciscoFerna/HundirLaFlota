@@ -3,23 +3,41 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hundir La Flota</title>
+    <title>Hundir la Flota</title>
     <link rel="stylesheet" href="./style/styles.css">
-    <script defer src="./js/main.js" type="module"></script>
+    <script type="module" src="./js/main.js" defer></script>
 </head>
 
 <body>
+    <h1>Hundir la Flota</h1>
+
     <div id="barcos-disponibles">
-        <h3>Barcos:</h3>
+        <h3>Selecciona tus barcos</h3>
     </div>
 
-    <div id="tablero-jugador" class="tablero"></div>
-    <button id="reset">Resetear tablero</button>
+    <button id="jugar" disabled>Jugar</button>
 
-    <h3>Tablero enemigo (IA)</h3>
-    <div id="tablero-ia" class="tablero"></div>
+    <div id="tableros">
+        <div>
+            <h3>Tu Tablero</h3>
+            <div id="tablero-jugador" class="tablero"></div>
+        </div>
+        <div>
+            <h3>Tablero Enemigo</h3>
+            <div id="tablero-ia" class="tablero"></div>
+        </div>
+    </div>
 
+    <div id="form-disparo" style="display:none; margin-top: 20px;">
+        <h3>Dispara introduciendo coordenadas</h3>
+        <label for="input-x">X:</label>
+        <input type="number" id="input-x" min="0" max="9">
+        <label for="input-y">Y:</label>
+        <input type="number" id="input-y" min="0" max="9">
+        <button id="disparar">Disparar</button>
+    </div>
+
+    <button id="reset">Reiniciar Partida</button>
 </body>
 
 </html>

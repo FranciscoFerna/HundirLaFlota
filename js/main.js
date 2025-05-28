@@ -1,3 +1,6 @@
+import { disparoJugador } from "../controllers/juego.js";
+import { turnoIA } from "../controllers/IA.js";
+
 import { Barco } from "./model/Barco.js";
 import { Tablero } from "./model/Tablero.js";
 
@@ -60,7 +63,7 @@ function crearTableroHTML(id, filas, columnas) {
 function asignarEventosCasillas() {
     document.querySelectorAll("#tablero-jugador .casilla").forEach(celda => {
         celda.addEventListener("click", () => {
-            if (!barcoSeleccionado) return alert("Selecciona un barco primero");
+            if (!barcoSeleccionado) return console.log("Selecciona un barco primero");
 
             const { nombre, tamaño, boton } = barcoSeleccionado;
             const x = +celda.dataset.x,
@@ -78,9 +81,10 @@ function asignarEventosCasillas() {
                 if (barcosColocados === totalBarcos) {
                     bloquearTablero();
                     activarAtaquesIA();
+                    document.getElementById("jugar").disabled = false;
                 }
             } else {
-                alert("No se puede colocar el barco ahi");
+                console.log("No se puede colocar el barco ahi");
             }
         });
     });
@@ -90,7 +94,6 @@ function bloquearTablero() {
     document.querySelectorAll("#tablero-jugador .casilla").forEach(c => {
         c.style.pointerEvents = "none";
     });
-    alert("Todos los barcos colocados. Empieza el combate");
 }
 
 function bloquearAtaquesIA() {
@@ -116,7 +119,8 @@ document.getElementById("reset").addEventListener("click", () => {
     barcosColocados = 0;
     document.querySelectorAll("#barcos-disponibles button").forEach(btn => btn.disabled = false);
     bloquearAtaquesIA();
-    alert("Tablero reiniciado");
+    document.getElementById("jugar").disabled = true;
+    document.getElementById("form-disparo").style.display = "none";
 });
 
 function colocarBarcosIA(barcos) {
@@ -138,66 +142,71 @@ function asignarEventosAtaqueIA() {
         celda.addEventListener("click", () => {
             const x = parseInt(celda.dataset.x);
             const y = parseInt(celda.dataset.y);
-            const casilla = tableroIA.casillas[x][y];
-
-            if (casilla.atacada) return;
-
-            const resultado = casilla.recibirAtaque();
-            casilla.atacada = true;
-
-            celda.classList.add("atacada");
-            celda.style.pointerEvents = "none";
-
-            if (resultado === "agua") {
-                celda.classList.add("agua");
-                alert("Agua");
-            } else if (resultado === "tocado") {
-                celda.classList.add("tocado");
-                alert("Tocado");
-            } else if (resultado === "hundido") {
-                celda.classList.add("hundido");
-                alert("Hundido");
+            const resultado = disparoJugador(x, y, tableroIA);
+            if (resultado !== "repetida") {
+                procesarResultadoDisparo(x, y, resultado);
             }
-
-            if (tableroIA.barcos.every(barco => barco.estaHundido())) {
-                alert("Has ganado");
-                bloquearTablero();
-                bloquearAtaquesIA();
-                return;
-            }
-            setTimeout(turnoIA, 500);
-            console.log(celda.classList)
         });
     });
 }
 
-function turnoIA() {
-    let x, y, casilla;
-    do {
-        x = Math.floor(Math.random() * 10);
-        y = Math.floor(Math.random() * 10);
-        casilla = tablero.casillas[x][y];
-    } while (casilla.atacada);
+document.getElementById("jugar").addEventListener("click", () => {
+    document.getElementById("form-disparo").style.display = "block";
+});
 
-    const resultado = casilla.recibirAtaque();
-    const celdaDOM = document.querySelector(`#tablero-jugador .casilla[data-x='${x}'][data-y='${y}']`);
-    celdaDOM.classList.add("atacada");
-    celdaDOM.style.pointerEvents = "none";
+document.getElementById("disparar").addEventListener("click", () => {
+    const x = parseInt(document.getElementById("input-x").value);
+    const y = parseInt(document.getElementById("input-y").value);
+    if (isNaN(x) || isNaN(y) || x < 0 || x > 9 || y < 0 || y > 9) {
+        console.log("Coordenadas no validas");
+        return;
+    }
+    const resultado = disparoJugador(x, y, tableroIA);
+    if (resultado !== "repetida") {
+        procesarResultadoDisparo(x, y, resultado);
+    }
+});
+
+function procesarResultadoDisparo(x, y, resultado) {
+    const celda = document.querySelector(`#tablero-ia .casilla[data-x='${x}'][data-y='${y}']`);
+    celda.classList.add("atacada");
+    celda.style.pointerEvents = "none";
 
     if (resultado === "agua") {
-        celdaDOM.classList.add("agua");
-        alert("La IA ha fallado ( Agua)");
-    } else if (resultado === "tocado") {
-        celdaDOM.classList.add("tocado");
-        alert("La IA ha tocado uno de tus barcos (Tocado)");
-    } else if (resultado === "hundido") {
-        celdaDOM.classList.add("hundido");
-        alert("La IA ha hundido uno de tus barcos (Hundido)");
-    }
+        celda.classList.add("agua");
+        console.log("Agua");
 
-    if (tablero.barcos.every(barco => barco.estaHundido())) {
-        alert("Has perdido. La IA ha hundido todos tus barcos.");
-        bloquearTablero();
-        bloquearAtaquesIA();
+        const ia = turnoIA(tablero);
+        const celdaIA = document.querySelector(`#tablero-jugador .casilla[data-x='${ia.x}'][data-y='${ia.y}']`);
+        celdaIA.classList.add("atacada");
+        celdaIA.style.pointerEvents = "none";
+
+        if (ia.resultado === "agua") {
+            celdaIA.classList.add("agua");
+            console.log("IA: agua");
+        } else if (ia.resultado === "tocado") {
+            celdaIA.classList.add("tocado");
+            console.log("IA: tocado");
+        } else if (ia.resultado === "hundido") {
+            celdaIA.classList.add("hundido");
+            console.log("IA: hundido");
+        }
+
+        if (tablero.barcos.every(barco => barco.estaHundido())) {
+            console.log("Has perdido");
+            bloquearTablero();
+            bloquearAtaquesIA();
+        }
+
+    } else {
+        celda.classList.add(resultado === "hundido" ? "hundido" : "tocado");
+        console.log(resultado === "hundido" ? "Barco hundido" : "Barco tocado");
+
+        if (tableroIA.barcos.every(barco => barco.estaHundido())) {
+            console.log("Has ganado");
+            bloquearTablero();
+            bloquearAtaquesIA();
+            document.getElementById("form-disparo").style.display = "none";
+        }
     }
 }
