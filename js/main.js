@@ -5,8 +5,14 @@ import {
   disparoJugador,
   procesarResultadoDisparo,
   turnoIA,
-  asignarEventosAtaqueIA
+  asignarEventosAtaqueIA,
 } from "./controllers/juego.js";
+import {
+  guardarPartida,
+  cargarPartida,
+  recuperaTablerosApi,
+} from "./controllers/api.js";
+
 import { mostrarBarcos } from "./setup/jugador.js";
 import { colocarBarcosIA } from "./setup/ia.js";
 import { tablero, tableroIA } from "./controllers/estado.js";
@@ -72,4 +78,17 @@ document.getElementById("reset").addEventListener("click", () => {
       mostrarBarcos(barcos);
       colocarBarcosIA(barcos, window.tableroIA);
     });
+});
+
+document.getElementById("btnGuardar").addEventListener("click", () => {
+  const nombreJugador = prompt("Introduce tu nombre:");
+  guardarPartida(nombreJugador, window.tablero, window.tableroIA);
+});
+
+document.getElementById("btnCargar").addEventListener("click", async () => {
+  const id = prompt("Introduce el ID de la partida:");
+  const partida = await cargarPartida(id);
+  if (partida) {
+    recuperaTablerosApi(partida);
+  }
 });
